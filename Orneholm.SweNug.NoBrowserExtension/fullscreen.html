@@ -1,0 +1,153 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Animation - HTML5</title>
+    <link rel="stylesheet" href="/styles.css" />
+
+    <style>
+        canvas {
+            border: 1px solid #000;
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html">Home</a>
+
+    <h1>Fullscreen</h1>
+
+    <ul class="links">
+        <li><a href="http://www.w3.org/TR/fullscreen/">W3C</a></li>
+        <li><a href="http://caniuse.com/#feat=fullscreen">Can I use?</a></li>
+    </ul>
+
+    <canvas id="canvas"></canvas>
+    <script>
+        (function () {
+            var canvas = document.getElementById('canvas');
+            canvas.width = 1000;
+            canvas.height = 500;
+
+            var context = canvas.getContext('2d');
+            var animationObjects = [];
+
+            window.requestAnimationFrame(moveAndRenderBalls);
+
+            canvas.addEventListener('click', function () {
+                addSomeBalls();
+            });
+
+            function moveAndRenderBalls() {
+                moveBalls(animationObjects);
+                renderBalls(animationObjects);
+
+                window.requestAnimationFrame(moveAndRenderBalls);
+            }
+
+            function addSomeBalls() {
+                animationObjects = animationObjects.concat(getBalls(10));
+            }
+
+            function getBalls(count) {
+                var balls = [];
+                for (var i = 0; i < count; i++) {
+                    balls.push(getBall());
+                }
+                return balls;
+            }
+
+            function getBall() {
+                var colors = ['black', 'pink', 'blue', 'green', 'azure'];
+                var velocities = [-4, -3, -2, 2, 3, 4];
+
+                var ball = {
+                    color: getRandomValue(colors),
+                    radius: getRandomInt(20, 125),
+                    position: {
+                        x: getRandomInt(1, canvas.width),
+                        y: getRandomInt(1, canvas.height)
+                    },
+                    velocity: {
+                        x: getRandomValue(velocities),
+                        y: getRandomValue(velocities)
+                    },
+                    move: function () {
+                        updateVelocityAndPositionForAxis('x', canvas.width);
+                        updateVelocityAndPositionForAxis('y', canvas.height);
+
+                        function updateVelocityAndPositionForAxis(axis, max) {
+                            if (ball.position[axis] <= 0 || ball.position[axis] >= max) {
+                                ball.velocity[axis] *= -1;
+                            }
+
+                            ball.position[axis] += ball.velocity[axis];
+                        }
+                    },
+                    render: function () {
+                        context.beginPath();
+                        context.arc(ball.position.x, ball.position.y, ball.radius, 0, 2 * Math.PI, false);
+                        context.fillStyle = ball.color;
+                        context.fill();
+
+                        context.lineWidth = 2;
+                        context.strokeStyle = 'black';
+                        context.stroke();
+                    }
+                };
+
+                function getRandomInt(min, max) {
+                    return Math.floor(Math.random() * (max - min + 1)) + min;
+                }
+
+                function getRandomValue(values) {
+                    return values[getRandomInt(0, values.length - 1)];
+                }
+
+                return ball;
+            }
+
+            function moveBalls(balls) {
+                balls.forEach(function (ball) {
+                    ball.move();
+                });
+            }
+
+            function renderBalls(balls) {
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                balls.forEach(function (ball) {
+                    ball.render();
+                });
+                context.font = "20px Arial";
+                context.fillStyle = 'black';
+                context.fillText(balls.length + ' objects', 10, 25);
+            }
+        }());
+    </script>
+
+    <br />
+
+    <button id="open">Open</button>
+    <script>
+        (function () {
+            var canvas = document.getElementById('canvas');
+            document.getElementById('open').addEventListener('click', function () {
+                if (canvas.requestFullscreen) {
+                    canvas.requestFullscreen();
+                } else if (canvas.msRequestFullscreen) {
+                    canvas.msRequestFullscreen();
+                } else if (canvas.mozRequestFullScreen) {
+                    canvas.mozRequestFullScreen();
+                } else if (canvas.webkitRequestFullscreen) {
+                    canvas.webkitRequestFullscreen();
+                }
+            });
+        }());
+    </script>
+
+    <h2>Cool examples</h2>
+
+    <ul class="links">
+        <li><a href="http://www.google.com/slides/about/">Google Presentation</a></li>
+    </ul>
+</body>
+
+</html>

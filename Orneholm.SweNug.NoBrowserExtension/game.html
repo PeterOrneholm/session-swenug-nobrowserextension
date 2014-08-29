@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Game - HTML5</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <style>
+        canvas {
+            border: 1px solid #000;
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html">Home</a>
+
+    <h1>Game</h1>
+
+    <h2>Move the circle with the gamepad</h2>
+
+    <ul class="links">
+        <li><a href="http://www.w3.org/TR/gamepad/">W3C</a></li>
+    </ul>
+
+    <div id="status">&nbsp;</div>
+
+    <canvas id="canvas" width="1000" height="500"></canvas>
+    <script>
+        (function () {
+            // Step 1: listen for any gamepad to be connected (requires a button to be pressed)
+            window.addEventListener('gamepadconnected', function (e) {
+                document.getElementById('status').innerText = e.gamepad.id + ' connected';
+
+                window.requestAnimationFrame(animate);
+            });
+
+            var canvas = document.getElementById('canvas');
+            var context = canvas.getContext('2d');
+            var objects = [];
+            var lastFrame;
+
+            function animate(timestamp) {
+                var progress;
+                if (lastFrame === null) {
+                    lastFrame = timestamp;
+                }
+                progress = timestamp - lastFrame;
+
+                moveObjects(progress);
+                drawObjects();
+
+                lastFrame = timestamp;
+
+                window.requestAnimationFrame(animate);
+            }
+
+            canvas.addEventListener('click', function (event) {
+                objects.push({
+                    x: event.offsetX,
+                    y: event.offsetY,
+                    size: 50
+                });
+            });
+
+            function moveObjects(time) {
+                // Step 2: get a reference to the first gamepad
+                var gamepad = navigator.getGamepads()[0];
+
+                // Step 3: Get the current axis values
+                var vx = gamepad.axes[0];
+                var vy = gamepad.axes[1];
+                var vs = gamepad.axes[2];
+                
+                objects.forEach(function (object) {
+                    // Step 4: Move the objects
+
+                    object.x += 0.5 * time * vx; //50px/s * 0.1px/ms
+                    object.y += 0.5 * time * vy; //100px/s * 0.1px/ms
+
+                    object.size += 0.1 * time * vs;
+                    object.size = Math.max(object.size, 5);
+                });
+            }
+
+            function drawObjects() {
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                objects.forEach(function (object) {
+                    context.beginPath();
+                    context.arc(object.x, object.y, object.size, 0, 2 * Math.PI, false);
+                    context.fillStyle = 'azure';
+                    context.fill();
+                    context.stroke();
+                });
+            }
+        }());
+    </script>
+
+
+
+    <h2>Cool examples</h2>
+
+    <ul class="links">
+        <li><a href="http://www.html5rocks.com/en/tutorials/doodles/gamepad/gamepad-tester/tester.html">Gamepad tester</a></li>
+        <li><a href="http://tutsplus.github.io/Using-the-HTML5-Gamepad-API/game2.html">Brick game</a></li>
+        <li><a href="http://www.usebox.net/jjm/alien-gamma/play.html">Alien gamma</a></li>
+    </ul>
+</body>
+</html>

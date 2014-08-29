@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Files - HTML5</title>
+    <link rel="stylesheet" href="/styles.css" />
+</head>
+    <body>
+        <a href="index.html">Home</a>
+
+        <h1>Files</h1>
+
+
+        <h2>Accept Specific</h2>
+
+        <ul class="links">
+            <li><a href="http://www.w3.org/TR/2012/WD-html5-20121025/states-of-the-type-attribute.html#attr-input-accept">W3C</a></li>
+        </ul>
+
+        <h3>PNG</h3>
+        <input type="file" accept="image/png" />
+
+        <h3>Specific media type (XML)</h3>
+        <input type="file" accept="application/xml" />
+
+        <h3>File extension (Word)</h3>
+        <input type="file" accept=".doc, .docx" />
+
+
+
+
+        <h2>Accept Wildcard</h2>
+
+        <ul class="links">
+            <li><a href="http://www.w3.org/TR/2012/WD-html5-20121025/states-of-the-type-attribute.html#attr-input-accept">W3C</a></li>
+        </ul>
+
+        <h3>Images</h3>
+        <input type="file" accept="image/*" />
+
+        <h3>Videos</h3>
+        <input type="file" accept="video/*" />
+
+        <h3>Audio</h3>
+        <input type="file" accept="audio/*" />
+
+
+
+
+        <h2>Multiple</h2>
+
+        <ul class="links">
+            <li><a href="http://www.w3.org/TR/html5/forms.html#attr-input-multiple">W3C</a></li>
+            <li><a href="http://caniuse.com/#feat=input-file-multiple">Can I use?</a></li>
+        </ul>
+
+        <input type="file" accept="image/*" multiple />
+
+
+
+        <h2>Capture</h2>
+
+        <ul class="links">
+            <li><a href="http://www.w3.org/TR/html-media-capture/">W3C</a></li>
+        </ul>
+
+        <h3>Images</h3>
+        <input type="file" accept="image/*" capture />
+
+        <h3>Videos</h3>
+        <input type="file" accept="video/*" capture />
+
+        <h3>Audio</h3>
+        <input type="file" accept="audio/*" capture />
+    </body>
+</html>

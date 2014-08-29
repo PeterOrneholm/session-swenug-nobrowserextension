@@ -1,0 +1,96 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Photobooth - HTML5</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <style>
+        video:hover {
+            cursor: pointer;
+        }
+
+        video {
+            border-radius: 50%;
+            -webkit-filter: contrast(1.4) saturate(1.8) sepia(.6);
+            filter: contrast(1.4) saturate(1.8) sepia(.6);
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html">Home</a>
+
+    <h1>Profile</h1>
+
+    <h2>Please take a profile picture</h2>
+    <ul class="links">
+        <li><a href="http://www.w3.org/TR/mediacapture-streams/">W3C</a></li>
+        <li><a href="http://caniuse.com/#feat=stream">Can I use?</a></li>
+    </ul>
+
+    <canvas style="display: none;"></canvas>
+
+    <div>
+        <video></video>
+        <img />
+    </div>
+
+    <a id="download" href="#" download="ProfilePicture.png">Download</a>
+
+    <script>
+        (function () {
+            navigator.getUserMedia = (navigator.getUserMedia ||
+                navigator.webkitGetUserMedia ||
+                navigator.mozGetUserMedia ||
+                navigator.msGetUserMedia);
+
+            if (navigator.getUserMedia) {
+                // Step 1: Get the stream
+                navigator.getUserMedia({
+                    video: true,
+                    audio: false
+                }, function (localMediaStream) {
+                    // Step 2: Get a url reference to the stream
+                    var streamUrl = window.URL.createObjectURL(localMediaStream);
+
+                    console.log(streamUrl);
+
+                    // Step 3: Point the video element to that url
+                    var video = document.querySelector('video');
+                    video.src = streamUrl;
+                    video.play();
+
+                    video.addEventListener('click', function () {
+                        var canvas = document.querySelector('canvas');
+
+                        canvas.width = video.videoWidth;
+                        canvas.height = video.videoHeight;
+
+                        // Step 4: Draw the current video frame on the canvas
+                        canvas.getContext('2d').drawImage(video, 0, 0);
+
+                        // Step 5: get the canvas as a PNG
+                        var imgUrl = canvas.toDataURL('image/png');
+
+                        // Step 6: Set the image to that PNG
+                        document.querySelector('img').src = imgUrl;
+
+                        // Step 7: Add the image to the download link
+                        document.getElementById('download').href = imgUrl;
+                    });
+
+                }, function (error) {
+                    console.error(error);
+                });
+            } else {
+                alert("getUserMedia not supported");
+            }
+        }());
+    </script>
+
+
+    <h2>Cool examples</h2>
+    <ul class="links">
+        <li><a href="http://wolframhempel.github.io/photobooth-js/">Photobooth JS</a></li>
+        <li><a href="http://shinydemos.com/facekat/">FaceKat</a></li>
+    </ul>
+</body>
+</html>
