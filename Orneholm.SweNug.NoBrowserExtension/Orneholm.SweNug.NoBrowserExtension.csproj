@@ -63,6 +63,7 @@
     <Content Include="index.html" />
     <Content Include="media.html" />
     <Content Include="photobooth.html" />
+    <None Include="Properties\PublishProfiles\peterorneholm-nobrowserextension.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
